@@ -2,7 +2,6 @@ import torch
 import os
 from torchvision import transforms
 import cv2
-import matplotlib.pyplot as plt
 from csrnet.model import CSRNet
 
 model = CSRNet()
@@ -34,6 +33,20 @@ def count_people_in_image(path): # Loading image and estimating number of people
         count = torch.sum(model_output).item()
         return count
 
-img_name = "airportimage2.jpg"
-img_path = os.path.join(script_dir, "..", "images", img_name) # Creates an absolute path for the image that doesn't depend on this file's location
-print(f"Crowd Count Estimate: {int(count_people_in_image(img_path))}") # Prints estimate to terminal (REMOVE IN FUTURE)
+def count_all_images():
+    images_dir = os.path.join(script_dir, "..", "images") # Images folder destination
+    for filename in os.listdir(images_dir):
+        if filename.lower().endswith((".jpg", ".jpeg", ".png")):
+            img_path = os.path.join(images_dir, filename)
+            try:
+                count = count_people_in_image(img_path)
+                print(f"Crowd Estimate for {filename}: {int(count_people_in_image(img_path))}") # Prints estimate to terminal (REMOVE IN FUTURE)
+            except FileNotFoundError as error:
+                print(error)
+
+def run_image_count():
+    img_name = "airportimage2.jpg"
+    img_path = os.path.join(script_dir, "..", "images", img_name) # Creates an absolute path for the image that doesn't depend on this file's location
+    print(f"Crowd Count Estimate: {int(count_people_in_image(img_path))}") # Prints estimate to terminal (REMOVE IN FUTURE)
+
+count_all_images()
