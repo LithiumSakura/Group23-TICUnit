@@ -2,7 +2,6 @@ import torch
 import os
 from torchvision import transforms
 import cv2
-import numpy as np
 import matplotlib.pyplot as plt
 from csrnet.model import CSRNet
 
@@ -20,14 +19,21 @@ transform = transforms.Compose([
                          std=[0.229,0.224,0.225])
 ])
 
-# Loading Images for Crowd Counting
-img_path = "crowdtest.jpg"
-img = cv2.imread(img_path)
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-img_tensor = transform(img).unsqueeze(0)
+def count_people_in_image(path): # Loading image and estimating number of people in it
+    img = cv2.imread(path)
+    try:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img_to_count = transform(img).unsqueeze(0)
+    except:
+        if img is None: # Returns an error if image not found in file destination
+            raise FileNotFoundError(f"No image found at: {path}")
+        else:
+            print("Unknown error")
+    with torch.no_grad():
+        model_output = model(img_to_count)
+        count = torch.sum(model_output).item()
+        return count
 
-with torch.no_grad():
-    model_output = model(img_tensor)
-    count = torch.sum(model_output).item()
-
-print(f"Crowd Count Estimate: {int(count)}")
+img_name = "airportimage2.jpg"
+img_path = os.path.join(script_dir, "..", "images", img_name) # Creates an absolute path for the image that doesn't depend on this file's location
+print(f"Crowd Count Estimate: {int(count_people_in_image(img_path))}") # Prints estimate to terminal (REMOVE IN FUTURE)
