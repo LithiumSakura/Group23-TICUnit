@@ -3,7 +3,7 @@ import os
 from torchvision import transforms
 import cv2
 from .csrnet.model import CSRNet
-import json
+
 
 model = CSRNet()
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -33,9 +33,6 @@ def count_people_in_image(path): # Loading image and estimating number of people
         model_output = model(img_to_count)
         count = torch.sum(model_output).item()
         return count
-    
-def pass_to_main(number):
-    return number
 
 def count_all_images():
     count_list = []
@@ -52,5 +49,3 @@ def count_all_images():
 def run_image_count(img_name):
     img_path = os.path.join(script_dir, "..", "images", img_name) # Creates an absolute path for the image that doesn't depend on this file's location
     return count_people_in_image(img_path)
-
-run_image_count("airportimage2.jpg")
