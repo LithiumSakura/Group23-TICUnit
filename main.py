@@ -13,10 +13,12 @@ def dashboard():
 
 @app.route('/traffic-count', methods=["GET","POST"])
 def traffic_count():
-    count = crowd_detection.run_image_count("airportimage2.jpg")
+    gate_counts = crowd_detection.count_people_at_gates()
+    print("#######################")
+    print(gate_counts)
     if request.method == 'POST':
-        return jsonify({"count": int(count)})
-    return render_template('traffic.html', count=int(count))
+        return jsonify({"count": int(gate_counts)})
+    return render_template('traffic.html', counts=gate_counts)
 
 if __name__ == "__main__":
     app.run(debug=True)

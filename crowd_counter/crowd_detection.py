@@ -52,11 +52,11 @@ def count_people_at_gates():
     count_list = []
     images_dir = os.path.join(script_dir, "..", "images")
     all_images = [f for f in os.listdir(images_dir) if f.lower().endswith((".jpg",".jpeg",".png"))]
-    selected_images = random.sample(all_images, min(6, len(all_images)))
+    selected_images = random.sample(all_images, min(7, len(all_images)))
     for filename in selected_images:
         img_path = os.path.join(images_dir, filename)
         try:
-            count_list.append(count_people_in_image(img_path))
+            count_list.append(int(count_people_in_image(img_path)))
         except FileNotFoundError as error:
             print(error)
     return count_list
@@ -65,3 +65,5 @@ def run_image_count(img_name):
     img_path = os.path.join(script_dir, "..", "images", img_name) # Creates an absolute path for the image that doesn't depend on this file's location
     count = count_people_in_image(img_path)
     return count
+
+
