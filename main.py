@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from crowd_counter import crowd_detection
 
 app = Flask(__name__)
@@ -14,7 +14,10 @@ def dashboard():
 @app.route('/traffic-count')
 def traffic_count():
     count = crowd_detection.run_image_count("airportimage2.jpg")
-    return jsonify({"count": int(count)})
+    if request.method == 'POST':
+        return jsonify({"count": int(count)})
+
+    return render_template('traffic.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

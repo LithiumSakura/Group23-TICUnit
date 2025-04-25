@@ -14,16 +14,16 @@
                 <!-- Sidebar -->
                 <div class="col-md-3 col-lg-2 d-md-block sidebar collapse p-0">
                     <div class="pt-3 px-3">
-                        <h3 class="text-center mb-4">Dashboard</h3>
+                        <h3 class="text-center mb-4">Traffic</h3>
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('landing') }}">
-                                    <i class="bi bi-house"></i> Home
+                                <a class="nav-link" href="{{ url_for('dashboard') }}">
+                                    <i class="bi bi-house"></i> Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('traffic_count') }}">
-                                    <i class="bi bi-stoplights"></i> Traffic
+                                <a class="nav-link" href="{{ url_for('landing') }}">
+                                    <i class="bi bi-stoplights"></i> Home
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -47,7 +47,7 @@
                 
                 <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                        <h1 class="h2">Dashboard Overview</h1>
+                        <h1 class="h2">Traffic</h1>
                     </div>
     
                     <!-- Stats Cards -->
@@ -58,28 +58,11 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-uppercase mb-1">
-                                                Flights</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
+                                                Crowd</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">N/A</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-    
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card stat-card border-0">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-uppercase mb-1">
-                                                Passengers</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
