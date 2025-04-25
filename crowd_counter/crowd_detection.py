@@ -4,6 +4,8 @@ from torchvision import transforms
 import cv2
 from .csrnet.model import CSRNet
 
+import random
+
 
 model = CSRNet()
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -46,6 +48,20 @@ def count_all_images():
                 print(error)
     return count_list
 
+def count_people_at_gates():
+    count_list = []
+    images_dir = os.path.join(script_dir, "..", "images")
+    all_images = [f for f in os.listdir(images_dir) if f.lower().endswith((".jpg",".jpeg",".png"))]
+    selected_images = random.sample(all_images, min(6, len(all_images)))
+    for filename in selected_images:
+        img_path = os.path.join(images_dir, filename)
+        try:
+            count_list.append(count_people_in_image(img_path))
+        except FileNotFoundError as error:
+            print(error)
+    return count_list
+
 def run_image_count(img_name):
     img_path = os.path.join(script_dir, "..", "images", img_name) # Creates an absolute path for the image that doesn't depend on this file's location
-    return count_people_in_image(img_path)
+    count = count_people_in_image(img_path)
+    return count
