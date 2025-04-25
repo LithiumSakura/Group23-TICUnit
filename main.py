@@ -11,13 +11,12 @@ def landing():
 def dashboard():
     return render_template("dashboard.html")
 
-@app.route('/traffic-count')
+@app.route('/traffic-count', methods=["GET","POST"])
 def traffic_count():
     count = crowd_detection.run_image_count("airportimage2.jpg")
     if request.method == 'POST':
         return jsonify({"count": int(count)})
-
-    return render_template('traffic.html')
+    return render_template('traffic.html', count=int(count))
 
 if __name__ == "__main__":
     app.run(debug=True)

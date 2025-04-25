@@ -1,15 +1,13 @@
 import smtplib
 from email.mime.text import MIMEText
-import yagmail
 
 # Email Information
 sender = "airportmanagementgroup23@gmail.com"
 
-password = "bkpq alsr olqq mbfd"
-title = "Airport Notification"
-text = "Test body"
+password = "bkpq alsr olqq mbfd" # Google app password
+title = "Airport Management System Notification"
+text = "This is a test notification for the email sender system that will be changed in the future"
 reciever = [sender, "samuelellisrobertson@gmail.com"]
-
 
 def make_notification(type,area): # Type of notification and area in which it involves (area can be none)
     if type.lower() == "crowd":
@@ -21,7 +19,7 @@ def send_email(title, text, sender, reciever, password):
     msg = MIMEText(text)
     msg["Subject"] = title
     msg["From"] = sender
-    msg["To"] = ", ".join(reciever)
+    msg["To"] = ", ".join(reciever) # Adds all recievers of the message to the email
     with smtplib.SMTP("smtp.gmail.com", 587) as smtp_server:
         smtp_server.starttls()
         print(password)
