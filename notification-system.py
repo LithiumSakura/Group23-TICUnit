@@ -7,7 +7,24 @@ sender = "airportmanagementgroup23@gmail.com"
 password = "bkpq alsr olqq mbfd" # Google app password
 title = "Airport Management System Notification"
 text = "This is a test notification for the email sender system that will be changed in the future"
-reciever = [sender, "samuelellisrobertson@gmail.com"]
+
+# MAKE AN AREA TO GRAB RECIPIENT INFO FROM DATABASE
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+reciever = [sender, "samuelellisrobertson@gmail.com", "ben@woodwardfamily.eu", "oisinwillisdabomb@gmail.com", "pelayoanglada05@gmail.com"] # Change to program that gets based off gates
+
 
 def make_notification(type,area): # Type of notification and area in which it involves (area can be none)
     if type.lower() == "crowd":
