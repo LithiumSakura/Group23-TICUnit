@@ -7,9 +7,9 @@ app = Flask(__name__)
 def landing():
     return render_template("index.html")
 
-@app.route('/dashboard')
-def dashboard():
-    return render_template("dashboard.html")
+@app.route('/flights')
+def flights():
+    return render_template("flights.html")
 
 @app.route('/traffic-count', methods=["GET","POST"])
 def traffic_count():
@@ -19,6 +19,10 @@ def traffic_count():
     if request.method == 'POST':
         return jsonify({"count": int(gate_counts)})
     return render_template('traffic.html', counts=gate_counts)
+
+@app.route('/user-authentication')
+def user_authentication():
+    return render_template("user.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
