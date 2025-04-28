@@ -45,24 +45,18 @@
                     </div>
                 </div>
                 
-                <div class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                    <div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
-                        <form class="search-form">
-                            <div class="row g-3">
-                                <div class="col-6">
-                                    <label for="destination" class="form-label">Destination</label>
-                                    <input type="text" class="form-control" id="destination" placeholder="Destination">
-                                </div>
-                                <div class="col-3">
-                                    <label for="flightNumber" class="form-label">Flight Number</label>
-                                    <input type="text" class="form-control" id="flightNumber" placeholder="BA212">
-                                </div>
-                                <div class="col-2">
-                                    <label class="form-label">&nbsp;</label>
-                                    <button type="button" class="btn btn-primary">Search</button>
-                                </div>
+                <div class="main-content">
+                    <div class="search-container">
+                        <h2>Airport Assistant</h2>
+                        <div class="chat-container" id="chat-box">
+                            <div class="message-container">
+                                <div class="bot-message">Welcome to Airport Assistant! How can I help you today?</div>
                             </div>
-                        </form>
+                        </div>
+                        <div class="input-container">
+                            <input type="text" id="user-input" placeholder="Type your question here (e.g., 'Can you give me info for my flight BA212?')" />
+                            <button onclick="sendMessage()">Send</button>
+                        </div>
                     </div>
                 </div>
             </div>
