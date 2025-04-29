@@ -17,11 +17,25 @@ def get_busy_gates(): # Returns a list of busy gates
             busy_gates.append(i+1)
     return busy_gates
 
+def get_gates():
+    return crowd_detection.count_people_at_gates()
+
+def predict_traffic(old,new): # Returns a list of gates in which traffic is predicted to rise
+    old_counts = old
+    new_counts = new
+    predicted_increases = []
+    print("Starting check...")
+    if len(old_counts) == len(new_counts):
+        for i in range(len(old_counts)):
+            if new_counts[i] >= old_counts[i]*1.2: # Checks for a 20% increase - can be changed!
+                predicted_increases.append(new_counts[i])
+    return predicted_increases
+
 # MAKE AN AREA TO GRAB RECIPIENT INFO FROM DATABASE
 # Once database is implemented this function will get the email of all users that have flights near a busy gate OR a flight that is soon to depart
 
-
-
+# def get_passenger_info():
+    return passengers
 
 
 
@@ -40,7 +54,7 @@ def make_notification(type,gate): # Type of notification and gate in which it in
     if type.lower() == "crowd":
         return f"Warning - {gate} may be busy due to traffic."
     elif type.lower() == "reminder":
-        return f"Reminder - your gate closes soon, please make your way to gate {area}."
+        return f"Reminder - your gate closes soon, please make your way to gate {gate}."
     
 def send_email(title, text, sender, reciever, password):
     msg = MIMEText(text)
@@ -49,11 +63,10 @@ def send_email(title, text, sender, reciever, password):
     msg["To"] = ", ".join(reciever) # Adds all recievers of the message to the email
     with smtplib.SMTP("smtp.gmail.com", 587) as smtp_server:
         smtp_server.starttls()
-        print(password)
         smtp_server.login(sender, password)
         smtp_server.sendmail(sender, reciever, msg.as_string())
     print("Checkpoint - Sent!")
 
+
 print(reciever)
 #send_email(title, text, sender, reciever, password)
-print(get_busy_gates())
