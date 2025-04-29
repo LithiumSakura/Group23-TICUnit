@@ -9,7 +9,7 @@ app = Flask(__name__)
 def background_traffic_monitor():
     last_count = crowd_detection.count_people_at_gates()
     while True:
-        time.sleep(30) # Repeats every two minutes
+        time.sleep(120) # Repeats every two minutes
         new_count = crowd_detection.count_people_at_gates()
         predicted_increases = notification_system.predict_traffic(last_count,new_count)
         for i in range(len(predicted_increases)):
@@ -22,6 +22,12 @@ def background_traffic_monitor():
                 notification_system.password
             )
         last_count = new_count
+
+def background_flight_reminder():
+    while True:
+        time.sleep(300) # Refreshes every 5 mins
+        # Add section here which checks database for flights leaving soon
+
         
 @app.route('/', methods=["GET","POST"])
 def landing():
