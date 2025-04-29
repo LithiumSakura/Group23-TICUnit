@@ -4,7 +4,7 @@ from torchvision import transforms
 import cv2
 from .csrnet.model import CSRNet
 
-import random
+import random # Used for example of how it would work when linked to actual cctv
 
 
 model = CSRNet()
@@ -36,7 +36,7 @@ def count_people_in_image(path): # Loading image and estimating number of people
         count = torch.sum(model_output).item()
         return count
 
-def count_all_images():
+def count_all_images(): # Only really used for debugging
     count_list = []
     images_dir = os.path.join(script_dir, "..", "images") # Images folder destination
     for filename in os.listdir(images_dir):
@@ -48,7 +48,7 @@ def count_all_images():
                 print(error)
     return count_list
 
-def count_people_at_gates():
+def count_people_at_gates(): # Counts number of people at each gate
     count_list = []
     images_dir = os.path.join(script_dir, "..", "images")
     all_images = [f for f in os.listdir(images_dir) if f.lower().endswith((".jpg",".jpeg",".png"))]
@@ -65,5 +65,4 @@ def run_image_count(img_name):
     img_path = os.path.join(script_dir, "..", "images", img_name) # Creates an absolute path for the image that doesn't depend on this file's location
     count = count_people_in_image(img_path)
     return count
-
 
