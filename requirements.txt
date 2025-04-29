@@ -1,6 +1,7 @@
 blinker==1.9.0
 click==8.1.8
 Flask==3.1.0
+google_search_results==2.4.2
 itsdangerous==2.2.0
 Jinja2==3.1.6
 MarkupSafe==3.0.2
@@ -25,6 +26,7 @@ packaging==25.0
 pillow==11.2.1
 pyparsing==3.2.3
 python-dateutil==2.9.0.post0
+python-dotenv==1.1.0
 six==1.17.0
 sympy==1.13.1
 torch==2.6.0

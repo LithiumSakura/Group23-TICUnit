@@ -52,40 +52,53 @@
     
                     <!-- Stats Cards -->
                     <div class="row">
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card stat-card border-0">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-uppercase mb-1">
-                                                Flights</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        {% if flights %}
+                            {% for flight in flights %}
+                                <div class="col-xl-4 col-md-6 mb-4">
+                                    <div class="card border-0 shadow rounded-lg">
+                                        <div class="card-body p-4">
+                                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                                <div class="text-primary fw-bold">{{ flight.flight_id }}</div>
+                                                <div class="text-muted">{{ flight.airplane }}</div>
+                                            </div>
+                                            <h5 class="card-title mb-3">{{ flight.airline }}</h5>
+                                            <div class="mb-3">
+                                                <span class="badge bg-success-subtle text-success">Status: {{ flight.status }}</span>
+                                            </div>
+                                            <div class="row mb-4">
+                                                <div class="col-6">
+                                                    <div class="text-uppercase text-muted small mb-1">DEPARTURE</div>
+                                                    <div class="text-dark fw-bold">{{ flight.airport }}</div>
+                                                    <div>{{ flight.departure_time }}</div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="text-uppercase text-muted small mb-1">ARRIVAL</div>
+                                                    <div class="text-dark fw-bold">{{ flight.destination }}</div>
+                                                    <div>{{ flight.arrival_time }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-4">
+                                                <div class="col-6">
+                                                    <div class="text-uppercase text-muted small mb-1">DURATION</div>
+                                                    <div class="text-dark">{{ flight.duration }} min</div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="text-uppercase text-muted small mb-1">CLASS</div>
+                                                    <div class="text-dark">{{ flight.travel_class }}</div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-    
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card stat-card border-0">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-uppercase mb-1">
-                                                Passengers</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">0</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="col-12">
+                                <div class="alert alert-info">
+                                    No flight data available at the moment. Please try again later.
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        {% endif %}
+                    </div>                                         
                 </div>
             </div>
         </div>
