@@ -9,5 +9,36 @@
         <link rel="stylesheet" href="/static/css/style.css">
     </head>
     <body>
+        <div class="container-fluid bg-image">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-3 col-lg-2 d-md-block sidebar collapse p-0">
+                    <div class="pt-3 px-3">
+                        <h3 class="text-center mb-4">Home</h3>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('flights') }}">
+                                    <i class="bi bi-airplane"></i> Flights
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('traffic_count') }}">
+                                    <i class="bi bi-stoplights"></i> Traffic
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('landing') }}">
+                                    <i class="bi bi-people"></i> Home
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('infoboard') }}">
+                                    <i class="bi bi-info-circle"></i> Infoboard
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+        <script src="/static/js/script.js"></script>
     </body>
 </html>

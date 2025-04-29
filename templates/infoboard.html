@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -32,38 +32,13 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('infoboard') }}">
-                                    <i class="bi bi-info-circle"></i> Infoboard
+                                <a class="nav-link" href="{{ url_for('landing') }}">
+                                    <i class="bi bi-info-circle"></i> Home
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </div>
-                
-                <div class="main-content">
-                    <div class="search-container">
-                        <h2>Airport Assistant</h2>
-                        <div class="chat-container" id="chat-box">
-                            <div class="message-container">
-                                <div class="bot-message">Welcome to Airport Assistant! How can I help you today?</div>
-                            </div>
-                            {% if show_response and user_message %}
-                                <div class="message user-message">{{ user_message }}</div>
-                                <div class="message bot-message">{{ bot_response }}</div>
-                            {% endif %}
-                        </div>
-                        <div class="chat-input-container">
-                            <form method="POST" action="/" class="d-flex">
-                                <input type="text" name="message" class="form-control" placeholder="Type your question here (e.g., 'Can you give me info for my flight BA212?')" required>
-                                <button type="submit" class="btn btn-primary ms-2">
-                                    <i class="bi bi-send"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <script src="/static/js/script.js"></script>
     </body>
 </html>
