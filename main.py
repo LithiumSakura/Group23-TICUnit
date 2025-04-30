@@ -58,6 +58,7 @@ def get_flight_info(flight_code):
         flights = []
         response = requests.get(url, params=params)
         results = response.json()
+        #print(flight_code) debug
     
         if 'best_flights' in results:
             flights = results['best_flights']
@@ -69,9 +70,14 @@ def get_flight_info(flight_code):
         for flight in flights:
             if flight.get("flights"):
                 for f in flight.get("flights", []):
-                    if f.get('flight_number') == flight_code:
-                        flight_info = flight['flights'][0]
-                        exact_match_found = True
+                    flight_info = flight['flights'][0]
+                    api_flight_number = flight_info.get('flight_number', '').replace(' ', '')
+                    api_flight_id = flight_info.get('flight_id', '').replace(' ', '')
+                    search_flight_code = flight_code.replace(' ', '')
+                    # print(api_flight_number, "api flight number") debug
+                    # print(api_flight_id, "api_flight_id") debug
+                    # print(search_flight_code, "search_flight_code") debug
+                    if api_flight_number == search_flight_code or api_flight_id == search_flight_code:
                         flight_data.append({
                             "flight_id": flight_info.get('flight_number', flight_code),
                             "airline": flight_info.get('airline', 'Unknown Airline'),
@@ -81,16 +87,14 @@ def get_flight_info(flight_code):
                             "departure_time": flight_info.get('departure_airport', {}).get('time', ''),
                             "destination": flight_info.get('arrival_airport', {}).get('name', 'Unknown'),
                             "arrival_time": flight_info.get('arrival_airport', {}).get('time', ''),
-                            "duration": flight_info.get('duration', 0),
+                            "duration": flight_info.get('duration', 0), 
                             "travel_class": flight_info.get('travel_class', 'Economy'),
                             "status": "On Time"
                         })
-                        # The regular expression 
                         break
-
-            if exact_match_found:
-                break
-
+                if flight_data:
+                    break
+                
         return f"Here's your flight information:\n\n" \
                 f"Flight: {flight_data[0]['flight_id']} ({flight_data[0]['airline']})\n" \
                 f"Departure: {flight_data[0]['airport']}\n" \
@@ -117,6 +121,10 @@ def get_flight_info(flight_code):
             airline = "Delta Airlines"
             departure = "Atlanta"
             destination = "Seattle"
+        elif flight_code.startswith("VS"):
+            airline = "Virgin Atlantic"
+            departure = "London Heathrow"
+            destination = "Los Angeles"
         else:
             airline = "Unknown Airline"
             departure = "Unknown Origin"
@@ -126,7 +134,7 @@ def get_flight_info(flight_code):
             "flight_id": flight_code,
             "airline": airline,
             "airport": departure,
-            "destination": destination,
+            "destination": destination, 
             "status": "Unknown"
         })
         
@@ -139,10 +147,13 @@ def get_flight_info(flight_code):
 def generate_response(message):
     """Generate a response based on user message""" 
     message = message.lower()
-    flight_match = re.search(r'(?:flight\s+)?([a-z]{2}\d{1,4})', message, re.IGNORECASE) #TODO: Fix the regular expression the space in the flight code doesn't get the exact match just fallsback on the fake data
+    flight_match = re.search(r'\b([a-z]{2})\s*(\d{1,4})\b', message)
+
     # Check if the message is asking about flight information
     if flight_match:
-        flight_code = flight_match.group(1).upper()
+        airline_code = flight_match.group(1).upper()
+        flight_number = flight_match.group(2)
+        flight_code = airline_code + flight_number
         return get_flight_info(flight_code)
     
     # If saying hello or similar greeting
@@ -165,13 +176,13 @@ def landing():
     if request.method == 'GET':
         return render_template('index.html', user_message="", bot_response="", show_response=False)
     
-    if request.method == 'POST':
+    elif request.method == 'POST':
         user_message = request.form.get('message', '').strip()
         
         if user_message:
             bot_response = generate_response(user_message)
 
-    return render_template("index.html", user_message=user_message, bot_response=bot_response, show_response=(request.method == 'POST'))
+        return render_template("index.html", user_message=user_message, bot_response=bot_response, show_response=(request.method == 'POST'))
 
 @app.route('/flights', methods=["GET"])
 def flights():
