@@ -27,3 +27,84 @@
 .form-control {
     background-color: rgba(255, 255, 255, 0.8);
 }
+
+.main-content {
+    flex: 1;
+    position: relative;
+    height: 100vh;
+    width: 100vw; /* Added to make it full width */
+    background-image: url('/static/airport.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.search-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    width: 1400px;
+    height: 80vh;
+    max-height: 700px;
+    max-width: 95%;
+}
+
+.chat-container {
+    height: 80vh;
+    max-height: 550px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.input-container {
+    display: flex;
+}
+
+#user-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.bot-message {
+    background-color: #e8f4fd;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    max-width: 80%;
+}
+
+.user-message {
+    background-color: #3498db;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    max-width: 80%;
+    text-align: right;
+}
+
+.message-container {
+    display: flex;
+    flex-direction: column;
+}
