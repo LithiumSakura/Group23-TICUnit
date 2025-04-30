@@ -260,9 +260,6 @@ def traffic_count():
 def user_authentication():
     return render_template("user.html")
 
-@app.route('/infoboard')
-def infoboard():
-    return render_template("infoboard.html")
 
 if __name__ == "__main__":
     threading.Thread(target=background_traffic_monitor,daemon=True).start()
