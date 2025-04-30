@@ -68,5 +68,4 @@ def send_email(title, text, sender, reciever, password):
     print("Checkpoint - Sent!")
 
 
-print(crowd_detection.count_all_images())
 #send_email(title, text, sender, reciever, password)
