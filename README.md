@@ -59,6 +59,10 @@ or
 ```bash
 pip3 install -r requirements.txt
 ```
+4. Rename .env_template and call it .env then add the API key from documentation
+```bash
+SERP_API_KEY = "API_KEY_GOES_HERE"
+```
 ## Usage
 
 To start the web app run:
