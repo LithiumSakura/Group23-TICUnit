@@ -1,8 +1,7 @@
 
 
 ### REQUIRED!
--- IDE: PyCharm
--- CMAKE needs to be installed from their ligitimate website: https://cmake.org/download/
+-- CMAKE needs to be installed from: https://cmake.org/download/
 -- Python version 3.10.0: https://www.python.org/downloads/release/python-3100/
 
 
