@@ -2,6 +2,7 @@ import pandas as pd
 from datetime import datetime, timedelta
 
 data = pd.read_csv("mock_flight_data.csv")
+data["Departure"] = pd.to_datetime(data["Departure"], format="%H:%M").dt.time
 
 def get_emails_from_gate(gate):
     return data[data["Gate"]==gate]["Email"].tolist() # Returns a list of passenger emails depending on their gate
