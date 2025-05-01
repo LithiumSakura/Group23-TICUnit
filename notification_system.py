@@ -1,6 +1,7 @@
 import smtplib
 from email.mime.text import MIMEText
 from crowd_counter import crowd_detection
+import database_connect
 
 # Email Information
 sender = "airportmanagementgroup23@gmail.com"
@@ -27,28 +28,11 @@ def predict_traffic(old,new): # Returns a list of gates in which traffic is pred
     print("Starting check...")
     if len(old_counts) == len(new_counts):
         for i in range(len(old_counts)):
-            if new_counts[i] >= old_counts[i]*1.2: # Checks for a 20% increase - can be changed!
+            if new_counts[i] >= old_counts[i]*1.5: # Checks for a 50% increase - can be changed!
                 predicted_increases.append(new_counts[i])
     return predicted_increases
 
-# MAKE AN AREA TO GRAB RECIPIENT INFO FROM DATABASE
-# Once database is implemented this function will get the email of all users that have flights near a busy gate OR a flight that is soon to depart
-
-# def get_passenger_info():
-    return passengers
-
-
-
-
-
-
-
-
-
-
-
-reciever = [sender, "samuelellisrobertson@gmail.com", "ben@woodwardfamily.eu", "oisinwillisdabomb@gmail.com", "pelayoanglada05@gmail.com"] # Change to program that gets based off gates
-
+reciever = [sender]
 
 def make_notification(type,gate): # Type of notification and gate in which it involves (area can be none)
     if type.lower() == "crowd":

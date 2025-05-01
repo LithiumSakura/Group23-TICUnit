@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request, jsonify
 from serpapi import GoogleSearch
 from crowd_counter import crowd_detection
+import database_connect
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
 import requests
@@ -29,15 +30,27 @@ def background_traffic_monitor():
                 "Gate Traffic Notification",
                 message,
                 notification_system.sender,
-                notification_system.reciever,
+                database_connect.get_emails_from_gate(i+1),
                 notification_system.password
             )
+            print("DEBUG - Email Preview: ", message, database_connect.get_emails_from_gate(i+1))
         last_count = new_count
 
 def background_flight_reminder():
     while True:
         time.sleep(300) # Refreshes every 5 mins
-        # Add section here which checks database for flights leaving soon
+        gates = database_connect.get_departing_flight_info()
+        for gate in gates:
+            emails = database_connect.get_emails_from_gate(gate)
+            message = f"Reminder - your flight at gate ",gate, " leaves within 2 hours!"
+            notification_system.send_email(
+                "Flight Reminder Notification",
+                message,
+                notification_system.sender,
+                emails,
+                notification_system.password
+            )
+            print("DEBUG - Email Preview: ", message, "sent to: ", emails)
 
 def get_flight_info(flight_code):
     """Get flight info from API or fallback to sample data"""
@@ -263,4 +276,5 @@ def user_authentication():
 
 if __name__ == "__main__":
     threading.Thread(target=background_traffic_monitor,daemon=True).start()
+    threading.Thread(target=background_flight_reminder,daemon=True).start()
     app.run(debug=True)
