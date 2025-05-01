@@ -41,6 +41,7 @@ def make_notification(type,gate): # Type of notification and gate in which it in
         return f"Reminder - your gate closes soon, please make your way to gate {gate}."
     
 def send_email(title, text, sender, reciever, password):
+    text += "\nSent from Airport Email 23\nPlease do not reply to this message as it has been sent by an unmonitored email address"
     msg = MIMEText(text)
     msg["Subject"] = title
     msg["From"] = sender
