@@ -1,7 +1,14 @@
 
+
+### REQUIRED!
+-- IDE: PyCharm
+-- CMAKE needs to be installed from their ligitimate website: https://cmake.org/download/
+-- Python version 3.10.0: https://www.python.org/downloads/release/python-3100/
+
+
 ## Installation
 
-### This project requires python version 3.6-3.11
+Open a terminal in the IDE and write: cmake -version to check whether cmake package is alive. Then:
 
 1. Create a virtual environment:
 ```bash
