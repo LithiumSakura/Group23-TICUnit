@@ -5,6 +5,7 @@ import numpy as np
 import math
 import os
 import sys
+from antispoofing import test
 
 def face_confidence(face_distance, face_match_threshold=0.6):
     range = (1.0 - face_match_threshold)
@@ -31,8 +32,9 @@ class FaceRecognition:
         self.encode_faces()
 
     def encode_faces(self):
-        for image in os.listdir('Authentication Machine/faces'):
-            face_image = face_recognition.load_image_file('Authentication Machine/faces/'+image)
+        faces_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'faces')
+        for image in os.listdir(faces_dir):
+            face_image = face_recognition.load_image_file('faces/'+image)
             face_encoding = face_recognition.face_encodings(face_image)[0]
             
             self.known_face_encodings.append(face_encoding)
@@ -42,6 +44,9 @@ class FaceRecognition:
 
     def run_recognition(self):
         video_capture = cv2.VideoCapture(0)
+        
+        model_dir = './antispoofing/resources/anti_spoof_models'  
+        device_id = 0
 
         if not video_capture.isOpened():
             sys.exit("Could not open video device")
@@ -49,53 +54,78 @@ class FaceRecognition:
         while True:
             ret, frame = video_capture.read()
 
+            if not ret:
+                continue
+
             if self.process_current_frame:
                 small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
                 rgb_small_frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
 
-                # Find all faces in the current frame
                 self.face_locations = face_recognition.face_locations(rgb_small_frame)
-                
                 self.face_encodings = face_recognition.face_encodings(rgb_small_frame, self.face_locations)
 
                 self.face_names = []
-                for face_encoding in self.face_encodings:
-                    matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding)
-                    name = 'Unknown'
-                    confidence = 'Unknown'
+                self.liveness_results = []
 
-                    face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
-                    best_match_index = np.argmin(face_distances)
+                for (top, right, bottom, left), face_encoding in zip(self.face_locations, self.face_encodings):
+                    
+                    # Scale back to original frame size
+                    top *= 4
+                    right *= 4
+                    bottom *= 4
+                    left *= 4
 
-                    if matches[best_match_index]:
-                        name = self.known_face_names[best_match_index]
-                        confidence = face_confidence(face_distances[best_match_index])
+                    # Extract the face for spoofing check
+                    face_image = frame[top:bottom, left:right]
+                    if face_image.size == 0:
+                        self.liveness_results.append(("UNKNOWN", (left, top, right, bottom)))
+                        self.face_names.append("Unknown")
+                        continue
 
-                    if(confidence == 'Unknown'):
-                        self.face_names.append(f'{name}')
+                    try:
+                        spoof_result = test(face_image, model_dir, device_id)
+                    except:
+                        spoof_result = "UNKNOWN"
+
+                    self.liveness_results.append((spoof_result, (left, top, right, bottom)))
+
+                    if spoof_result == "REAL":
+                        matches = face_recognition.compare_faces(self.known_face_encodings, face_encoding)
+                        name = 'Unknown'
+                        confidence = 'Unknown'
+
+                        face_distances = face_recognition.face_distance(self.known_face_encodings, face_encoding)
+                        best_match_index = np.argmin(face_distances)
+
+                        if matches[best_match_index]:
+                            name = self.known_face_names[best_match_index]
+                            confidence = face_confidence(face_distances[best_match_index])
+
+                        name = name.split('.')[0]
+                        display_name = f'{name} ({confidence})' if confidence != 'Unknown' else name
                     else:
-                        self.face_names.append(f'{name} ({confidence})')
+                        display_name = "SPOOF DETECTED"
+
+                    self.face_names.append(display_name)
 
             self.process_current_frame = not self.process_current_frame
 
-            # Display annotations
-            for (top, right, bottom, left), name in zip(reversed(self.face_locations), reversed(self.face_names)):
-                top *= 4
-                right *= 4
-                bottom *= 4
-                left *= 4
+            # Display results
+            for (label, (left, top, right, bottom)), name in zip(self.liveness_results, self.face_names):
+                color = (0, 255, 0) if label == "REAL" else (0, 0, 255)
+                cv2.rectangle(frame, (left, top), (right, bottom), color, 2)
+                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), color, -1)
+                display_text = f"{label}: {name}" if label != "REAL" else name
+                cv2.putText(frame, display_text, (left + 6, bottom - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 1)
 
-                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-                cv2.rectangle(frame, (left, bottom -35), (right, bottom), (0, 0, 255), -1)
-                cv2.putText(frame, name, (left + 6, bottom - 6), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 1)
-
-            cv2.imshow('Face Recognition', frame)
+            cv2.imshow('Face Recognition + Anti-Spoofing', frame)
 
             if cv2.waitKey(1) == ord('a'):
                 break
 
         video_capture.release()
         cv2.destroyAllWindows()
+
 
 if __name__ == '__main__':
     face_recog_app = FaceRecognition()
