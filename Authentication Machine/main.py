@@ -34,7 +34,7 @@ class FaceRecognition:
     def encode_faces(self):
         faces_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'faces')
         for image in os.listdir(faces_dir):
-            face_image = face_recognition.load_image_file('faces/'+image)
+            face_image = face_recognition.load_image_file(faces_dir+'/'+image)
             face_encoding = face_recognition.face_encodings(face_image)[0]
             
             self.known_face_encodings.append(face_encoding)
@@ -45,7 +45,8 @@ class FaceRecognition:
     def run_recognition(self):
         video_capture = cv2.VideoCapture(0)
         
-        model_dir = './antispoofing/resources/anti_spoof_models'  
+        antispoofingdir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'antispoofing')
+        model_dir = antispoofingdir+'/resources/anti_spoof_models'  
         device_id = 0
 
         if not video_capture.isOpened():
