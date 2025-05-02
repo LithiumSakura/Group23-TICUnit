@@ -5,7 +5,7 @@ import numpy as np
 import math
 import os
 import sys
-from antispoofing import test
+import antispoofing.checker
 
 def face_confidence(face_distance, face_match_threshold=0.6):
     range = (1.0 - face_match_threshold)
@@ -76,16 +76,23 @@ class FaceRecognition:
                     left *= 4
 
                     # Extract the face for spoofing check
+                    frame_h, frame_w = frame.shape[:2]
+                    top = max(0, top)
+                    bottom = min(frame_h, bottom)
+                    left = max(0, left)
+                    right = min(frame_w, right)
+
                     face_image = frame[top:bottom, left:right]
-                    if face_image.size == 0:
+                    print(f"[DEBUG] Attempting to spoof check face of size {face_image.shape}")
+                    
+                    if face_image.size == 0 or face_image.shape[0] < 20 or face_image.shape[1] < 20:
+                        print("[DEBUG] Face crop too small or empty, skipping spoof check.")
                         self.liveness_results.append(("UNKNOWN", (left, top, right, bottom)))
                         self.face_names.append("Unknown")
                         continue
 
-                    try:
-                        spoof_result = test(face_image, model_dir, device_id)
-                    except:
-                        spoof_result = "UNKNOWN"
+                    spoof_result = antispoofing.checker.test(face_image, model_dir, device_id)
+                    print(f"[DEBUG] Spoof detection result: {spoof_result}")
 
                     self.liveness_results.append((spoof_result, (left, top, right, bottom)))
 

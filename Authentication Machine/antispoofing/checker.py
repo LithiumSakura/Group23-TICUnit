@@ -32,16 +32,21 @@ def check_image(image):
 
 
 def test(image, model_dir, device_id):
+
+    print(f"[DEBUG] test() received image size: {image.shape}")
     model_test = AntiSpoofPredict(device_id)
     image_cropper = CropImage()
-    #image = cv2.imread(SAMPLE_IMAGE_PATH + image_name)
+    
     image = cv2.resize(image, (int(image.shape[0] * 3 / 4), image.shape[0]))
     result = check_image(image)
+
     if result is False:
         return
+    
     image_bbox = model_test.get_bbox(image)
     prediction = np.zeros((1, 3))
     test_speed = 0
+    
     # sum the prediction from single model's result
     for model_name in os.listdir(model_dir):
         h_input, w_input, model_type, scale = parse_model_name(model_name)
@@ -82,10 +87,5 @@ if __name__ == "__main__":
         type=str,
         default="./resources/anti_spoof_models",
         help="model_lib used to test")
-    parser.add_argument(
-        "--image_name",
-        type=str,
-        default="./images/sample/image_F1.jpg",
-        help="image used to test")
     args = parser.parse_args()
     test(args.image_name, args.model_dir, args.device_id)

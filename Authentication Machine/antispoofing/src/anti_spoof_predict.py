@@ -39,17 +39,28 @@ class Detection:
         height, width = img.shape[0], img.shape[1]
         aspect_ratio = width / height
         if img.shape[1] * img.shape[0] >= 192 * 192:
-            img = cv2.resize(img,
-                             (int(192 * math.sqrt(aspect_ratio)),
-                              int(192 / math.sqrt(aspect_ratio))), interpolation=cv2.INTER_LINEAR)
+            img = cv2.resize(
+                img,
+                (int(192 * math.sqrt(aspect_ratio)),
+                int(192 / math.sqrt(aspect_ratio))), 
+                interpolation=cv2.INTER_LINEAR)
 
         blob = cv2.dnn.blobFromImage(img, 1, mean=(104, 117, 123))
         self.detector.setInput(blob, 'data')
         out = self.detector.forward('detection_out').squeeze()
+        
+        if len(out.shape) < 2 or out.shape[0] == 0:
+                print("[WARN] No face detected in get_bbox()")
+                return [0, 0, width, height]  # fallback to whole image
+
         max_conf_index = np.argmax(out[:, 2])
+        if out[max_conf_index, 2] < self.detector_confidence:
+            print(f"[WARN] Detection confidence too low: {out[max_conf_index, 2]}")
+            return [0, 0, width, height]  # fallback
+        
         left, top, right, bottom = out[max_conf_index, 3]*width, out[max_conf_index, 4]*height, \
                                    out[max_conf_index, 5]*width, out[max_conf_index, 6]*height
-        bbox = [int(left), int(top), int(right-left+1), int(bottom-top+1)]
+        bbox = [left, top, right - left, bottom - top]
         return bbox
 
 
